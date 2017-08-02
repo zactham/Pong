@@ -132,6 +132,7 @@ public class MainCode extends JPanel implements KeyListener
 	}
 	public void randomNums()
 	{
+		randomX = 0;
 		while(randomX < randomY || counter == 1)
 		{
 			randomX = (int) (Math.random() * 10) + 1 ; 
