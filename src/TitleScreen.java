@@ -44,6 +44,7 @@ public class TitleScreen extends JApplet
 		getContentPane().add(titleScButton);
 		setSize(2304,1296);
 		centerWindow();//centers the window
+		
 
 
 		titleScButton.addKeyListener(new KeyAdapter()
@@ -70,10 +71,7 @@ public class TitleScreen extends JApplet
 			{
 				int c = arg0.getKeyCode();
 				
-				if (c == KeyEvent.VK_S) 
-				{
-					sound.toggle();
-				}
+				
 			}
 		});
 
