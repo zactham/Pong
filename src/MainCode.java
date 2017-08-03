@@ -120,27 +120,30 @@ public class MainCode extends JPanel implements KeyListener
 
 
 		checkKeys();
-		
+
+		paddle1Hit();
 
 		if(paddle2Collision == false && paddle1Collision == true)
 		{
 			//hits the top after paddle 1 hits it
-			if(Ball.getBallY() == 0)
+			if(Ball.getBallY() <= 0)
 			{
 				//++
 				System.out.println("hit top");
-				randomX = randomX;
-				randomY = randomY;
+				//randomX = Math.abs(randomX);
+				//	if(randomY > 0)
+				randomY = -randomY;
 				runRandomNums = 1;
 			}	
 
 			//hits the bottom after paddle 1 hits it
-			if(Ball.getBallY() + ballSize == gameSize)
+			if(Ball.getBallY() + ballSize >= gameSize)
 			{
 				//+ -
 				System.out.println("hit bottom");
-				randomX = randomX;
-				randomY =  -randomY;
+				//	randomX = Math.abs(randomX);
+				//	if(randomY > 0)
+				randomY = -randomY;
 				runRandomNums = 1;
 
 
@@ -158,22 +161,24 @@ public class MainCode extends JPanel implements KeyListener
 		{
 
 			//hits the top after paddle 2 hits it
-			if(Ball.getBallY() == 0)
+			if(Ball.getBallY() <= 0)
 			{
-				//-+
+				//- +
 				System.out.println("hit top");
-				randomX = randomX;
-				randomY = -randomY;
+				//	if(randomX > 0)
+				//		randomX = -randomX;
+				randomY =-randomY;
 				runRandomNums = 1;
 			}	
 
 			//hits the bottom after paddle 2 hits it
-			if(Ball.getBallY() + ballSize == gameSize)
+			if(Ball.getBallY() + ballSize >= gameSize)
 			{
-				//- -
+				//- +
 				System.out.println("hit bottom");
-				randomX = randomX;
-				randomY =  randomY;
+				//	if(randomX > 0)
+				//		randomX = -randomX;
+				randomY = Math.abs(randomY);
 				runRandomNums = 1;
 
 			}		
@@ -181,7 +186,7 @@ public class MainCode extends JPanel implements KeyListener
 			Ball.setBallY(Ball.getBallY()-randomY);
 		}
 
-		paddle1Hit();
+
 
 		increaseP1Score();
 		increaseP2Score();
