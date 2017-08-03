@@ -14,15 +14,13 @@ import javax.swing.*;
 public class MainCode extends JPanel implements KeyListener
 {
 	Sound sound;
-	private int p1Score = 0;
-	private int p2Score = 0;
-	private boolean end;
-
 	//	private JFrame restart;
-	private JFrame gameOver;
 	private JFrame start;
 
 	private InputManager inputManager;
+
+	private int p1Score = 0;
+	private int p2Score = 0;
 
 	private final int gameSize = 1000;
 	private final int scorex = gameSize/5;
@@ -65,26 +63,11 @@ public class MainCode extends JPanel implements KeyListener
 		// launch game
 		JFrame frame = new JFrame("Sample Frame");
 		frame.add(this);
-		frame.setTitle("Game Title");
+		frame.setTitle("PONG");
 		setBackground(Color.black);
 
-		JOptionPane.showMessageDialog(start, "Game Instructions");
+		JOptionPane.showMessageDialog(start, "Player 1: Use Q and A\t Player 2: Use the Up and Down Keys");
 
-		//Sets the speed of the game for each mode
-		if (level == 1)		// easy
-		{
-
-		}
-
-		if (level == 2)		// medium
-		{
-
-		}
-
-		if (level == 3)		// hard
-		{
-
-		}
 
 
 		frame.setVisible(true);
@@ -113,12 +96,6 @@ public class MainCode extends JPanel implements KeyListener
 	public void MainLoop()
 	{
 
-		//+ - moves northeast
-		//+ + moves southeast
-		//- + moves southwest
-		//- - moves northwest
-
-
 		checkKeys();
 
 		paddle1Hit();
@@ -128,10 +105,8 @@ public class MainCode extends JPanel implements KeyListener
 			//hits the top after paddle 1 hits it
 			if(Ball.getBallY() <= 0)
 			{
-				//++
-				System.out.println("hit top");
-				//randomX = Math.abs(randomX);
-				//	if(randomY > 0)
+				//System.out.println("hit top");
+				playhitWall();
 				randomY = -randomY;
 				runRandomNums = 1;
 			}	
@@ -139,14 +114,11 @@ public class MainCode extends JPanel implements KeyListener
 			//hits the bottom after paddle 1 hits it
 			if(Ball.getBallY() + ballSize >= gameSize)
 			{
-				//+ -
-				System.out.println("hit bottom");
-				//	randomX = Math.abs(randomX);
-				//	if(randomY > 0)
+
+				//System.out.println("hit bottom");
+				playhitWall();
 				randomY = -randomY;
 				runRandomNums = 1;
-
-
 			}		
 
 			Ball.setBallX(Ball.getBallX() + randomX);
@@ -163,10 +135,8 @@ public class MainCode extends JPanel implements KeyListener
 			//hits the top after paddle 2 hits it
 			if(Ball.getBallY() <= 0)
 			{
-				//- +
-				System.out.println("hit top");
-				//	if(randomX > 0)
-				//		randomX = -randomX;
+				//System.out.println("hit top");
+				playhitWall();
 				randomY =-randomY;
 				runRandomNums = 1;
 			}	
@@ -174,22 +144,19 @@ public class MainCode extends JPanel implements KeyListener
 			//hits the bottom after paddle 2 hits it
 			if(Ball.getBallY() + ballSize >= gameSize)
 			{
-				//- +
-				System.out.println("hit bottom");
-				//	if(randomX > 0)
-				//		randomX = -randomX;
+				//System.out.println("hit bottom");
+				playhitWall();
 				randomY = Math.abs(randomY);
 				runRandomNums = 1;
-
 			}		
 			Ball.setBallX(Ball.getBallX()-randomX);
 			Ball.setBallY(Ball.getBallY()-randomY);
 		}
 
-
-
 		increaseP1Score();
 		increaseP2Score();
+
+		check10Score();
 
 
 		repaint();
@@ -204,8 +171,8 @@ public class MainCode extends JPanel implements KeyListener
 			runRandomNums = 2;
 		}
 
-		System.out.println(randomX);
-		System.out.println(randomY);
+		//System.out.println(randomX);
+		//System.out.println(randomY);
 
 
 	}
@@ -216,6 +183,7 @@ public class MainCode extends JPanel implements KeyListener
 				&& (Ball.getBallX() + ballSize >= Paddle2.getPaddleX() &&
 				Ball.getBallX() + ballSize <= Paddle2.getPaddleX() + paddleWidth))
 		{
+			playhitPaddle();
 			randomNums();
 			sendBalltoPaddle1 ();
 
@@ -230,6 +198,7 @@ public class MainCode extends JPanel implements KeyListener
 				&& (Ball.getBallX() + ballSize >= Paddle1.getPaddleX() &&
 				Ball.getBallX() + ballSize <= Paddle1.getPaddleX() + paddleWidth))
 		{
+			playhitPaddle();
 			randomNums();
 			sendBalltoPaddle2 ();
 
@@ -237,9 +206,19 @@ public class MainCode extends JPanel implements KeyListener
 
 	}
 
-	public void playSoundEffect()
+	public void playhitWall()
 	{
-		//sound.play("SMACK Sound Effect.wav");
+		sound.play("wallhit.wav");
+	}
+	
+	public void playhitPaddle()
+	{
+		sound.play("paddlehit.wav");
+	}
+	
+	public void playscoreincrease()
+	{
+		sound.play("scoreIncreased.wav");
 	}
 
 	// Centers the window
@@ -267,7 +246,7 @@ public class MainCode extends JPanel implements KeyListener
 	public void gameEnding()
 	{
 
-		sound.stop();
+		//sound.stop();
 
 		int result = JOptionPane.showConfirmDialog(this, 
 				"P1 Score: " + p1Score + "P2 Score: " + p2Score + " - Play Again?", 
@@ -287,7 +266,18 @@ public class MainCode extends JPanel implements KeyListener
 
 	private void resetGame()
 	{
+		p1Score = 0;
+		p2Score = 0;
 
+		paddle2Collision = false;
+		paddle1Collision = true;
+
+		randomX = 5;
+		randomY = 5;
+
+		runRandomNums = 1;
+
+		MainLoop();
 	}
 
 	public void displayScore(Graphics page)
@@ -300,6 +290,14 @@ public class MainCode extends JPanel implements KeyListener
 
 		page.drawString("P2: ", scorex+500, scorey + 60);
 		page.drawString(Integer.toString(p2Score), scorex+580, scorey + 60);
+
+
+	}
+
+	public void check10Score()
+	{
+		if (p1Score >9 || p2Score > 9)
+			gameEnding();
 	}
 
 	@Override
@@ -349,7 +347,8 @@ public class MainCode extends JPanel implements KeyListener
 				|| Ball.getBallX() == 1000 - ballSize && Ball.getBallY() == 1000 - ballSize)
 		{
 			p1Score++;
-			System.out.println("P1 Score Increased");
+			playscoreincrease();
+			//System.out.println("P1 Score Increased");
 			randomX = 5;
 			sendBalltoPaddle1();
 			Ball.setBallX(500);
@@ -366,7 +365,8 @@ public class MainCode extends JPanel implements KeyListener
 				|| Ball.getBallX() == 0 && Ball.getBallY() == 1000 - ballSize)
 		{
 			p2Score++;
-			System.out.println("P2 Score Increased");
+			playscoreincrease();
+			//	System.out.println("P2 Score Increased");
 			randomX = 5;
 			sendBalltoPaddle2 ();
 			Ball.setBallX(500);
@@ -384,20 +384,26 @@ public class MainCode extends JPanel implements KeyListener
 	public void checkKeys()
 	{
 		//Pressing the keys
-		if (inputManager.getKeyPressed(KeyEvent.VK_UP)==true)
+		if (inputManager.getKeyPressed(KeyEvent.VK_UP)==true 
+				&& Paddle2.getPaddleY() > 0)
 		{
 			Paddle2.setPaddleY(Paddle2.getPaddleY()-10);
 		}
-		else if (inputManager.getKeyPressed(KeyEvent.VK_DOWN)==true) 
+		else if (inputManager.getKeyPressed(KeyEvent.VK_DOWN)==true 
+			&& Paddle2.getPaddleY() + paddleHeight < gameSize)
 		{
 			Paddle2.setPaddleY(Paddle2.getPaddleY()+10);
 		}
-		else if (inputManager.getKeyPressed(KeyEvent.VK_Q)==true) 
+		
+		
+		if (inputManager.getKeyPressed(KeyEvent.VK_Q)==true
+				&& Paddle1.getPaddleY() > 0)
 		{
 			Paddle1.setPaddleY(Paddle1.getPaddleY()-10);
 		}
 
-		else if(inputManager.getKeyPressed(KeyEvent.VK_A))
+		else if(inputManager.getKeyPressed(KeyEvent.VK_A)
+				&& Paddle1.getPaddleY() + paddleHeight < gameSize)
 		{
 			Paddle1.setPaddleY(Paddle1.getPaddleY()+10);
 
