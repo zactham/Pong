@@ -113,6 +113,7 @@ public class TitleScreen extends JApplet
 			if (hard)
 				level = 3;
 		
+		
 		board = new MainCode();
 		board.init(level);
 	}

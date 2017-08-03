@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Window;
@@ -40,7 +41,7 @@ public class MainCode extends JPanel implements KeyListener
 
 	private int counter = 1;
 
-
+	private boolean topBottom = false;
 
 
 
@@ -57,6 +58,7 @@ public class MainCode extends JPanel implements KeyListener
 
 	public void init(int level)
 	{
+		setPreferredSize(new Dimension(gameSize, gameSize));
 
 		sound = new Sound();
 		inputManager = new InputManager();
@@ -89,7 +91,7 @@ public class MainCode extends JPanel implements KeyListener
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		centerWindow();
-		frame.setSize(gameSize, gameSize);
+
 		frame.setLocationRelativeTo(TitleScreen.theApp);
 
 		// runs the mainLoop
@@ -112,6 +114,7 @@ public class MainCode extends JPanel implements KeyListener
 	public void MainLoop()
 	{
 
+		topBottom = false;
 
 		checkKeys();
 		// updateGame();
@@ -120,8 +123,6 @@ public class MainCode extends JPanel implements KeyListener
 		{
 			Ball.setBallX(Ball.getBallX()+randomX);
 			Ball.setBallY(Ball.getBallY()+randomY);
-
-
 		}
 
 
@@ -132,18 +133,19 @@ public class MainCode extends JPanel implements KeyListener
 		{
 			Ball.setBallX(Ball.getBallX()-randomX);
 			Ball.setBallY(Ball.getBallY()-randomY);
-
-
 		}
 
 		paddle1Hit();
 
 
-		increaseP1Score();
-		increaseP2Score();
-
-
 		bounceBottom();
+		bounceTop();
+
+		if (topBottom == false)
+		{
+			increaseP1Score();
+			increaseP2Score();
+		}
 
 		repaint();
 	}
@@ -152,8 +154,8 @@ public class MainCode extends JPanel implements KeyListener
 		randomX = 0;
 		while(randomX < randomY || counter == 1)
 		{
-			randomX = (int) (Math.random() * 10) + 1 ; 
-			randomY = (int) (Math.random() * 10) + 1 ;  
+			randomX = (int) (Math.random() * 10) + 3 ; 
+			randomY = (int) (Math.random() * 10) + 3 ;  
 			counter = 2;
 		}
 
@@ -162,33 +164,31 @@ public class MainCode extends JPanel implements KeyListener
 
 
 	}
-	public boolean paddle2Hit()
+	public void paddle2Hit()
 	{
 
 		if ((Ball.getBallY() >= Paddle2.getPaddleY() && Ball.getBallY() <= Paddle2.getPaddleY() + paddleHeight)  
-				&& Ball.getBallX() + ballSize == Paddle2.getPaddleX())
+				&& (Ball.getBallX() + ballSize >= Paddle2.getPaddleX() &&
+				Ball.getBallX() + ballSize <= Paddle2.getPaddleX() + paddleWidth))
 		{
 			randomNums();
 			sendBalltoPaddle1 ();
-			return true;
 
 		}
-		return false;
 
 	}
 
-	public boolean paddle1Hit()
+	public void paddle1Hit()
 	{
 
 		if ((Ball.getBallY() >= Paddle1.getPaddleY() && Ball.getBallY() <= Paddle1.getPaddleY() + paddleHeight)  
-				&& Ball.getBallX() == Paddle1.getPaddleX() + ballSize)
+				&& (Ball.getBallX() + ballSize >= Paddle1.getPaddleX() &&
+				Ball.getBallX() + ballSize <= Paddle1.getPaddleX() + paddleWidth))
 		{
 			randomNums();
 			sendBalltoPaddle2 ();
-			return true;
 
 		}
-		return false;
 
 	}
 
@@ -250,11 +250,11 @@ public class MainCode extends JPanel implements KeyListener
 		//Displays the Score
 		page.setColor(Color.white);
 		page.setFont(new Font("Comic Sans MS", Font.PLAIN, 50));
-		page.drawString("P1: ", scorex+50, scorey);
-		page.drawString(Integer.toString(p1Score), scorex+130, scorey);
+		page.drawString("P1: ", scorex+50, scorey + 60);
+		page.drawString(Integer.toString(p1Score), scorex+130, scorey + 60);
 
-		page.drawString("P2: ", scorex+500, scorey);
-		page.drawString(Integer.toString(p2Score), scorex+580, scorey);
+		page.drawString("P2: ", scorex+500, scorey + 60);
+		page.drawString(Integer.toString(p2Score), scorex+580, scorey + 60);
 	}
 
 	@Override
@@ -279,6 +279,7 @@ public class MainCode extends JPanel implements KeyListener
 		page.fillRect(Ball.getBallX(), Ball.getBallY(), ballSize, ballSize);
 
 
+
 	}
 
 	public void sendBalltoPaddle1 ()
@@ -297,25 +298,31 @@ public class MainCode extends JPanel implements KeyListener
 
 	public void increaseP1Score()
 	{
-		if(Ball.getBallX()>Paddle2.getPaddleX())
+		
+		if(Ball.getBallX()>gameSize - ballSize && (Ball.getBallY() < gameSize - ballSize && Ball.getBallY() > 0 + ballSize))
 		{
 			p1Score++;
 			System.out.println("P1 Score Increased");
 			randomX = 5;
 			sendBalltoPaddle1();
 			Ball.setBallX(500);
+			Ball.setBallY(500);
+
 		}
 	}
 
 	public void increaseP2Score()
 	{
-		if(Ball.getBallX()<Paddle1.getPaddleX())
+		
+		if(Ball.getBallX()< 0 && (Ball.getBallY() < gameSize - ballSize && Ball.getBallY() > 0 + ballSize))
 		{
 			p2Score++;
 			System.out.println("P2 Score Increased");
-			randomY = 5;
+			randomX = 5;
 			sendBalltoPaddle2 ();
 			Ball.setBallX(500);
+			Ball.setBallY(500);
+
 
 		}
 
@@ -325,36 +332,47 @@ public class MainCode extends JPanel implements KeyListener
 	{
 
 		//paddle 1 hits it then bottom
-		if (paddle1Hit())
+		if (paddle2Collision == false && paddle1Collision == true)
 		{
-			if((Ball.getBallX()>=0 && Ball.getBallX()<=1000) && Ball.getBallY() - ballSize == 1000)
+			//TODO fix the setBall
+
+			if(Ball.getBallY() + ballSize == gameSize)
 			{
 				System.out.println("hit bottom");
 				Ball.setBallX(Ball.getBallX()+randomX);
-				Ball.setBallY(Ball.getBallY()-randomY);
+				Ball.setBallY(Ball.getBallY()+randomY);
+
+				System.out.println(Ball.getBallX());
+				System.out.println(Ball.getBallY());
+
+
 			}		
 		}
 
 		//paddle 2 hits it then bottom
-		if (paddle2Hit())
+		if (paddle2Collision == true && paddle1Collision == false)
 		{
-			if((Ball.getBallX()>=0 && Ball.getBallX()<=1000) && Ball.getBallY() - ballSize == 1000)
+
+			if(Ball.getBallY() + ballSize == gameSize)
 			{
 				System.out.println("hit bottom");
 				Ball.setBallX(Ball.getBallX()-randomX);
 				Ball.setBallY(Ball.getBallY()-randomY);
+
+
 			}
 		}
 
 	}
-	
+
 	public void bounceTop()
 	{
 
 		//paddle 1 hits it then top
-		if (paddle1Hit())
+		if (paddle2Collision == false && paddle1Collision == true)
 		{
-			if((Ball.getBallX()>=0 && Ball.getBallX()<=1000) && Ball.getBallY() == 0)
+
+			if(Ball.getBallY() == 0)
 			{
 				System.out.println("hit top");
 				Ball.setBallX(Ball.getBallX() + randomX);
@@ -363,9 +381,10 @@ public class MainCode extends JPanel implements KeyListener
 		}
 
 		//paddle 2 hits it then top
-		if (paddle2Hit())
+		if (paddle2Collision == true && paddle1Collision == false)
 		{
-			if((Ball.getBallX()>=0 && Ball.getBallX()<=1000) && Ball.getBallY() == 0)
+
+			if(Ball.getBallY() == 0)
 			{
 				System.out.println("hit top");
 				Ball.setBallX(Ball.getBallX() - randomX);

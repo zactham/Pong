@@ -2,7 +2,7 @@
 public class Paddle2 
 {
 	private static int paddleX = 900;
-	private static int paddleY = 800;
+	private static int paddleY = 900;
 	
 	public static int getPaddleX()
 	{
