@@ -83,6 +83,7 @@ public class TitleScreen extends JApplet
 			{
 			}
 
+			
 			public void mouseEntered(MouseEvent arg0) {
 
 			}

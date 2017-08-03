@@ -39,9 +39,8 @@ public class MainCode extends JPanel implements KeyListener
 	private int randomX = 5;
 	private int randomY = 5;
 
-	private int counter = 1;
+	private int runRandomNums = 1;
 
-	private boolean topBottom = false;
 
 
 
@@ -114,15 +113,41 @@ public class MainCode extends JPanel implements KeyListener
 	public void MainLoop()
 	{
 
-		topBottom = false;
+		//+ - moves northeast
+		//+ + moves southeast
+		//- + moves southwest
+		//- - moves northwest
+
 
 		checkKeys();
-		// updateGame();
+		
 
 		if(paddle2Collision == false && paddle1Collision == true)
 		{
-			Ball.setBallX(Ball.getBallX()+randomX);
-			Ball.setBallY(Ball.getBallY()+randomY);
+			//hits the top after paddle 1 hits it
+			if(Ball.getBallY() == 0)
+			{
+				//++
+				System.out.println("hit top");
+				randomX = randomX;
+				randomY = randomY;
+				runRandomNums = 1;
+			}	
+
+			//hits the bottom after paddle 1 hits it
+			if(Ball.getBallY() + ballSize == gameSize)
+			{
+				//+ -
+				System.out.println("hit bottom");
+				randomX = randomX;
+				randomY =  -randomY;
+				runRandomNums = 1;
+
+
+			}		
+
+			Ball.setBallX(Ball.getBallX() + randomX);
+			Ball.setBallY(Ball.getBallY() + randomY);
 		}
 
 
@@ -131,32 +156,47 @@ public class MainCode extends JPanel implements KeyListener
 
 		if(paddle2Collision == true && paddle1Collision == false)
 		{
+
+			//hits the top after paddle 2 hits it
+			if(Ball.getBallY() == 0)
+			{
+				//-+
+				System.out.println("hit top");
+				randomX = randomX;
+				randomY = -randomY;
+				runRandomNums = 1;
+			}	
+
+			//hits the bottom after paddle 2 hits it
+			if(Ball.getBallY() + ballSize == gameSize)
+			{
+				//- -
+				System.out.println("hit bottom");
+				randomX = randomX;
+				randomY =  randomY;
+				runRandomNums = 1;
+
+			}		
 			Ball.setBallX(Ball.getBallX()-randomX);
 			Ball.setBallY(Ball.getBallY()-randomY);
 		}
 
 		paddle1Hit();
 
+		increaseP1Score();
+		increaseP2Score();
 
-		bounceBottom();
-		bounceTop();
-
-		if (topBottom == false)
-		{
-			increaseP1Score();
-			increaseP2Score();
-		}
 
 		repaint();
 	}
 	public void randomNums()
 	{
 		randomX = 0;
-		while(randomX < randomY || counter == 1)
+		while(randomX < randomY || runRandomNums == 1)
 		{
 			randomX = (int) (Math.random() * 10) + 3 ; 
 			randomY = (int) (Math.random() * 10) + 3 ;  
-			counter = 2;
+			runRandomNums = 2;
 		}
 
 		System.out.println(randomX);
@@ -298,8 +338,10 @@ public class MainCode extends JPanel implements KeyListener
 
 	public void increaseP1Score()
 	{
-		
-		if(Ball.getBallX()>gameSize - ballSize && (Ball.getBallY() < gameSize - ballSize && Ball.getBallY() > 0 + ballSize))
+
+		if(Ball.getBallX()>gameSize - ballSize && (Ball.getBallY() < gameSize - ballSize && Ball.getBallY() > 0 + ballSize)
+				|| Ball.getBallX() == 1000 - ballSize && Ball.getBallY() == 0 
+				|| Ball.getBallX() == 1000 - ballSize && Ball.getBallY() == 1000 - ballSize)
 		{
 			p1Score++;
 			System.out.println("P1 Score Increased");
@@ -313,8 +355,10 @@ public class MainCode extends JPanel implements KeyListener
 
 	public void increaseP2Score()
 	{
-		
-		if(Ball.getBallX()< 0 && (Ball.getBallY() < gameSize - ballSize && Ball.getBallY() > 0 + ballSize))
+
+		if(Ball.getBallX()< 0 && (Ball.getBallY() < gameSize - ballSize && Ball.getBallY() > 0 + ballSize)
+				|| Ball.getBallX() == 0 && Ball.getBallY() == 0
+				|| Ball.getBallX() == 0 && Ball.getBallY() == 1000 - ballSize)
 		{
 			p2Score++;
 			System.out.println("P2 Score Increased");
@@ -328,71 +372,8 @@ public class MainCode extends JPanel implements KeyListener
 
 	}
 
-	public void bounceBottom()
-	{
-
-		//paddle 1 hits it then bottom
-		if (paddle2Collision == false && paddle1Collision == true)
-		{
-			//TODO fix the setBall
-
-			if(Ball.getBallY() + ballSize == gameSize)
-			{
-				System.out.println("hit bottom");
-				Ball.setBallX(Ball.getBallX()+randomX);
-				Ball.setBallY(Ball.getBallY()+randomY);
-
-				System.out.println(Ball.getBallX());
-				System.out.println(Ball.getBallY());
 
 
-			}		
-		}
-
-		//paddle 2 hits it then bottom
-		if (paddle2Collision == true && paddle1Collision == false)
-		{
-
-			if(Ball.getBallY() + ballSize == gameSize)
-			{
-				System.out.println("hit bottom");
-				Ball.setBallX(Ball.getBallX()-randomX);
-				Ball.setBallY(Ball.getBallY()-randomY);
-
-
-			}
-		}
-
-	}
-
-	public void bounceTop()
-	{
-
-		//paddle 1 hits it then top
-		if (paddle2Collision == false && paddle1Collision == true)
-		{
-
-			if(Ball.getBallY() == 0)
-			{
-				System.out.println("hit top");
-				Ball.setBallX(Ball.getBallX() + randomX);
-				Ball.setBallY(Ball.getBallY() + randomY);
-			}		
-		}
-
-		//paddle 2 hits it then top
-		if (paddle2Collision == true && paddle1Collision == false)
-		{
-
-			if(Ball.getBallY() == 0)
-			{
-				System.out.println("hit top");
-				Ball.setBallX(Ball.getBallX() - randomX);
-				Ball.setBallY(Ball.getBallY() + randomY);
-			}
-		}
-
-	}
 
 
 	public void checkKeys()
