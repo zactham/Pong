@@ -1,27 +1,39 @@
+import java.awt.Graphics;
 
 public class Ball 
 {
-	private static int ballX = 500;
-	private static int ballY = 500;
-	
-	public static int getBallX()
+	private int ballX = 500;
+	private int ballY = 500;
+	private int ballSize = 20;
+
+	public int getBallX()
 	{
 		return ballX;
 	}
-	
-	public static void setBallX(int x)
+
+	public void setBallX(int x)
 	{
 		ballX = x;
 	}
-	
-	
-	public static int getBallY()
+
+
+	public int getBallY()
 	{
 		return ballY;
 	}
-	
-	public static void setBallY(int y)
+
+	public void setBallY(int y)
 	{
 		ballY = y;
+	}
+	
+	public int getBallSize()
+	{
+		return ballSize;
+	}
+
+	public void draw (Graphics page)
+	{
+		page.fillRect(getBallX(), getBallY(), getBallSize(), getBallSize());
 	}
 }
