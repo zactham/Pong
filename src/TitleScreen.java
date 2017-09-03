@@ -1,4 +1,3 @@
-
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -43,7 +42,7 @@ public class TitleScreen extends JApplet
 		titleScreenImage = new ImageIcon(this.getClass().getResource("TSImage.jpg"));//image	
 		titleScButton = new JButton (titleScreenImage);//image button
 		getContentPane().add(titleScButton);
-		setSize(2304,1296);
+		setSize(1800,950);
 		centerWindow();//centers the window
 		
 
