@@ -2,6 +2,7 @@ import java.awt.Graphics;
 
 public class Paddle
 {
+	//These are the values for when the gameSize is 1000
 	private int paddleX = 60;
 	private int paddleY = 900;
 
@@ -17,10 +18,20 @@ public class Paddle
 	{
 		paddleX = x;
 	}
+	
+	public void setPaddleWidth(int w)
+	{
+		 paddleWidth = w;
+	}
 
 	public int getPaddleWidth()
 	{
 		return paddleWidth;
+	}
+	
+	public void setPaddleHeight(int h)
+	{
+		 paddleHeight = h;
 	}
 
 	public int getPaddleHeight()

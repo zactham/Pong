@@ -2,6 +2,7 @@ import java.awt.Graphics;
 
 public class Ball 
 {
+	//These are the values for when the gameSize is 1000
 	private int ballX = 500;
 	private int ballY = 500;
 	private int ballSize = 20;
@@ -25,6 +26,11 @@ public class Ball
 	public void setBallY(int y)
 	{
 		ballY = y;
+	}
+	
+	public void setBallSize(int s)
+	{
+		 ballSize = s;
 	}
 	
 	public int getBallSize()

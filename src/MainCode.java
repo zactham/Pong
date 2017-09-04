@@ -29,7 +29,7 @@ public class MainCode extends JPanel implements KeyListener
 
 	private Ball ball = new Ball();
 
-	private final int gameSize = 1000;
+	public final int gameSize = 500;
 	private final int scorex = gameSize/5;
 	private final int scorey = gameSize-120;
 
@@ -69,14 +69,22 @@ public class MainCode extends JPanel implements KeyListener
 		setBackground(Color.black);
 
 		JOptionPane.showMessageDialog(start, "Player 1: Use Q and A\t Player 2: Use the Up and Down Keys");
-
-		paddle1.setPaddleX(60);
-		paddle1.setPaddleY(900);
-		paddle2.setPaddleX(900);
-		paddle2.setPaddleY(900);
 		
-		ball.setBallX(500);
-		ball.setBallY(500);
+		paddle1.setPaddleWidth(gameSize/33);
+		paddle2.setPaddleWidth(gameSize/33);
+		
+		paddle1.setPaddleHeight(gameSize/13);
+		paddle2.setPaddleHeight(gameSize/13);
+
+		paddle1.setPaddleX(gameSize/17);
+		paddle1.setPaddleY(gameSize-100);
+		paddle2.setPaddleX(gameSize-100);
+		paddle2.setPaddleY(gameSize-100);
+		
+		ball.setBallSize(gameSize/50);
+		
+		ball.setBallX(gameSize/2);
+		ball.setBallY(gameSize/2);
 
 		frame.setVisible(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -213,6 +221,7 @@ public class MainCode extends JPanel implements KeyListener
 		}
 
 	}
+	
 
 	public void playhitWall()
 	{
@@ -292,13 +301,13 @@ public class MainCode extends JPanel implements KeyListener
 	{
 		//Displays the Score
 		page.setColor(Color.white);
-		page.setFont(new Font("Comic Sans MS", Font.PLAIN, 50));
-		page.drawString("P1: ", scorex+50, scorey + 60);
-		page.drawString(Integer.toString(p1Score), scorex+130, scorey + 60);
+		page.setFont(new Font("Comic Sans MS", Font.PLAIN, gameSize/20));
+		page.drawString("P1: ", scorex+gameSize/20, scorey + gameSize/17);
+		page.drawString(Integer.toString(p1Score), scorex+gameSize/6, scorey + gameSize/17);
 
-		page.drawString("P2: ", scorex+500, scorey + 60);
-		page.drawString(Integer.toString(p2Score), scorex+580, scorey + 60);
-
+		page.drawString("P2: ", scorex+gameSize/2, scorey + gameSize/17);
+		page.drawString(Integer.toString(p2Score), scorex+gameSize/2 + 70, scorey + gameSize/17);
+		//Do not change that 70
 
 	}
 
@@ -357,8 +366,8 @@ public class MainCode extends JPanel implements KeyListener
 			//System.out.println("P1 Score Increased");
 			randomX = 5;
 			sendBalltoPaddle1();
-			ball.setBallX(500);
-			ball.setBallY(500);
+			ball.setBallX(gameSize/2);
+			ball.setBallY(gameSize/2);
 
 		}
 	}
@@ -375,8 +384,8 @@ public class MainCode extends JPanel implements KeyListener
 			//	System.out.println("P2 Score Increased");
 			randomX = 5;
 			sendBalltoPaddle2 ();
-			ball.setBallX(500);
-			ball.setBallY(500);
+			ball.setBallX(gameSize/2);
+			ball.setBallY(gameSize/2);
 
 
 		}
