@@ -29,7 +29,7 @@ public class MainCode extends JPanel implements KeyListener
 
 	private Ball ball = new Ball();
 
-	public final int gameSize = 500;
+	public final int gameSize = 1000;
 	private final int scorex = gameSize/5;
 	private final int scorey = gameSize-120;
 
@@ -303,7 +303,10 @@ public class MainCode extends JPanel implements KeyListener
 		page.setColor(Color.white);
 		page.setFont(new Font("Comic Sans MS", Font.PLAIN, gameSize/20));
 		page.drawString("P1: ", scorex+gameSize/20, scorey + gameSize/17);
-		page.drawString(Integer.toString(p1Score), scorex+gameSize/6, scorey + gameSize/17);
+		page.drawString(Integer.toString(p1Score), scorex+gameSize/9, scorey + gameSize/17);
+		
+		//TODO
+		//That scorex+gameSize/9 sometimes needs to be changed
 
 		page.drawString("P2: ", scorex+gameSize/2, scorey + gameSize/17);
 		page.drawString(Integer.toString(p2Score), scorex+gameSize/2 + 70, scorey + gameSize/17);
