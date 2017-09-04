@@ -69,10 +69,10 @@ public class MainCode extends JPanel implements KeyListener
 		setBackground(Color.black);
 
 		JOptionPane.showMessageDialog(start, "Player 1: Use Q and A\t Player 2: Use the Up and Down Keys");
-		
+
 		paddle1.setPaddleWidth(gameSize/33);
 		paddle2.setPaddleWidth(gameSize/33);
-		
+
 		paddle1.setPaddleHeight(gameSize/13);
 		paddle2.setPaddleHeight(gameSize/13);
 
@@ -80,9 +80,9 @@ public class MainCode extends JPanel implements KeyListener
 		paddle1.setPaddleY(gameSize-100);
 		paddle2.setPaddleX(gameSize-100);
 		paddle2.setPaddleY(gameSize-100);
-		
+
 		ball.setBallSize(gameSize/50);
-		
+
 		ball.setBallX(gameSize/2);
 		ball.setBallY(gameSize/2);
 
@@ -180,11 +180,25 @@ public class MainCode extends JPanel implements KeyListener
 	public void randomNums()
 	{
 		randomX = 0;
-		while(randomX < randomY || runRandomNums == 1)
+
+		if (gameSize == 1000)
 		{
-			randomX = (int) (Math.random() * 10) + 3 ; 
-			randomY = (int) (Math.random() * 10) + 3 ;  
-			runRandomNums = 2;
+			while(randomX < randomY || runRandomNums == 1)
+			{
+				randomX = (int) (Math.random() * 10) + 3 ; 
+				randomY = (int) (Math.random() * 10) + 3 ;  
+				runRandomNums = 2;
+			}
+		}
+		//TODO change based on gamesize
+		if (gameSize == 500)
+		{
+			while(randomX < randomY || runRandomNums == 1)
+			{
+				randomX = (int) (Math.random() * 7) + 3 ; 
+				randomY = (int) (Math.random() * 7) + 3 ;  
+				runRandomNums = 2;
+			}
 		}
 
 		//System.out.println(randomX);
@@ -221,7 +235,7 @@ public class MainCode extends JPanel implements KeyListener
 		}
 
 	}
-	
+
 
 	public void playhitWall()
 	{
@@ -304,7 +318,7 @@ public class MainCode extends JPanel implements KeyListener
 		page.setFont(new Font("Comic Sans MS", Font.PLAIN, gameSize/20));
 		page.drawString("P1: ", scorex+gameSize/20, scorey + gameSize/17);
 		page.drawString(Integer.toString(p1Score), scorex+gameSize/9, scorey + gameSize/17);
-		
+
 		//TODO
 		//That scorex+gameSize/9 sometimes needs to be changed
 
@@ -334,7 +348,7 @@ public class MainCode extends JPanel implements KeyListener
 
 		paddle1.draw(page);
 		paddle2.draw(page);
-		
+
 		ball.draw(page);
 
 
