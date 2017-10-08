@@ -39,10 +39,10 @@ public class TitleScreen extends JApplet
 
 
 		//Adds the image and creates a button out of it
-		titleScreenImage = new ImageIcon(this.getClass().getResource("TSImage.jpg"));//image	
+		titleScreenImage = new ImageIcon(this.getClass().getResource("PongTS.jpg"));//image	
 		titleScButton = new JButton (titleScreenImage);//image button
 		getContentPane().add(titleScButton);
-		setSize(1800,950);
+		setSize(605,480);
 		centerWindow();//centers the window
 		
 

@@ -29,7 +29,7 @@ public class MainCode extends JPanel implements KeyListener
 
 	private Ball ball = new Ball();
 
-	public final int gameSize = 1000;
+	public final int gameSize = 500;
 	private final int scorex = gameSize/5;
 	private final int scorey = gameSize-120;
 
@@ -195,8 +195,8 @@ public class MainCode extends JPanel implements KeyListener
 		{
 			while(randomX < randomY || runRandomNums == 1)
 			{
-				randomX = (int) (Math.random() * 7) + 3 ; 
-				randomY = (int) (Math.random() * 7) + 3 ;  
+				randomX = (int) (Math.random() * 6) + 3 ; 
+				randomY = (int) (Math.random() * 6) + 3 ;  
 				runRandomNums = 2;
 			}
 		}
@@ -280,7 +280,7 @@ public class MainCode extends JPanel implements KeyListener
 		//sound.stop();
 
 		int result = JOptionPane.showConfirmDialog(this, 
-				"P1 Score: " + p1Score + "P2 Score: " + p2Score + " - Play Again?", 
+				"P1 Score: " + p1Score + " & " + "P2 Score: " + p2Score + " - Play Again?", 
 				"Game Over", JOptionPane.YES_NO_OPTION);
 
 		if (result == JOptionPane.NO_OPTION)
@@ -323,7 +323,7 @@ public class MainCode extends JPanel implements KeyListener
 		//That scorex+gameSize/9 sometimes needs to be changed
 
 		page.drawString("P2: ", scorex+gameSize/2, scorey + gameSize/17);
-		page.drawString(Integer.toString(p2Score), scorex+gameSize/2 + 70, scorey + gameSize/17);
+		page.drawString(Integer.toString(p2Score), scorex+gameSize/2 + 40, scorey + gameSize/17);
 		//Do not change that 70
 
 	}
